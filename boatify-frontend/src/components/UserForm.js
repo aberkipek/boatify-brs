@@ -30,16 +30,12 @@ const UserForm = ({ isSignUp }) => {
     const isUsernameAvailable = async () => {
         const username = document.getElementById('username').value;
 
-        if (!username) return;
-
         try {
             const baseUrl = 'http://localhost:3001';
             const encodedUsername = encodeURIComponent(username);
             const response = await fetch(`${baseUrl}/getUsername?username=${encodedUsername}`);
 
             if (response.ok) {
-                const data = await response.json();
-
                 alert('Username is already taken. Please choose a different one.');
                 return false;
             } else if (response.status === 404) {
