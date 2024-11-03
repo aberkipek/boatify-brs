@@ -27,8 +27,36 @@ const UserForm = ({ isSignUp }) => {
         return isValid;
     }
 
+    const isUsernameAvailable = async () => {
+        const username = document.getElementById('username').value;
+
+        if (!username) return;
+
+        try {
+            const baseUrl = 'http://localhost:3001';
+            const encodedUsername = encodeURIComponent(username); 
+            const response = await fetch(`${baseUrl}/getUsername?username=${encodedUsername}`);
+
+            if (response.ok) {
+                const data = await response.json();
+                
+                alert('Username is already taken. Please choose a different one.');
+                return false; 
+            } else if (response.status === 404) {
+                return true; 
+            }
+        } catch (error) {
+            console.error('Error checking username availability:', error);
+            alert('An error occurred while checking username availability.');
+        }
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
+        
+        if (isSignUp && !await isUsernameAvailable()) {
+            return; 
+        }
 
         if (isSignUp && !checkPasswordEquality()) {
             alert('Passwords do not match!');
