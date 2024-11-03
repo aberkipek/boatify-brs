@@ -34,16 +34,16 @@ const UserForm = ({ isSignUp }) => {
 
         try {
             const baseUrl = 'http://localhost:3001';
-            const encodedUsername = encodeURIComponent(username); 
+            const encodedUsername = encodeURIComponent(username);
             const response = await fetch(`${baseUrl}/getUsername?username=${encodedUsername}`);
 
             if (response.ok) {
                 const data = await response.json();
-                
+
                 alert('Username is already taken. Please choose a different one.');
-                return false; 
+                return false;
             } else if (response.status === 404) {
-                return true; 
+                return true;
             }
         } catch (error) {
             console.error('Error checking username availability:', error);
@@ -53,9 +53,9 @@ const UserForm = ({ isSignUp }) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        
+
         if (isSignUp && !await isUsernameAvailable()) {
-            return; 
+            return;
         }
 
         if (isSignUp && !checkPasswordEquality()) {
@@ -131,7 +131,16 @@ const UserForm = ({ isSignUp }) => {
                         </div>
                         <div className="form-group">
                             <label htmlFor="phone">Phone Number:</label>
-                            <input type="tel" id="phone" required />
+                            <input
+                                type="tel"
+                                id="phone"
+                                required
+                                pattern="[0-9]*"
+                                inputMode="numeric"
+                                onInput={(e) => {
+                                    e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                }}
+                            />
                         </div>
                         <div className="form-group">
                             <label htmlFor="username">Username:</label>
