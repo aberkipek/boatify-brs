@@ -105,6 +105,34 @@ app.post('/login', async (req, res) => {
         console.error('Error during login:', error);
         res.status(500).json({ message: 'Error processing login' });
     }
+}); 
+
+app.get('/getUsername', (req, res) => {
+    const { username } = req.query; 
+
+    if (!username) {
+        return res.status(400).json({ message: 'Username is required' });
+    }
+
+    try {
+        const sqlQuery = 'SELECT username FROM users WHERE username = ?';
+        connection.query(sqlQuery, [username], (err, results) => {
+            if (err) {
+                console.error('Database error:', err);
+                return res.status(500).json({ message: 'Internal server error' });
+            }
+            if (results.length === 0) {
+                return res.status(404).json({ message: 'User does not exist' });
+            }
+            return res.status(200).json({
+                message: 'User exists',
+                username: results[0].username
+            });
+        });
+    } catch (error) {
+        console.error('Error during fetching username:', error);
+        res.status(500).json({ message: 'Error processing request' });
+    }
 });
 
 app.post('/logout', (req, res) => {
