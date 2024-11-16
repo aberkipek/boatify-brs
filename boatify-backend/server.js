@@ -20,8 +20,15 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
-const sessionStore = new MySQLStore({}, connection);
+// MySQLStore Configuration
+const sessionStore = new MySQLStore({
+    createDatabaseTable: false,
+    table: 'sessions',
+    expiration: 1000 * 60 * 5, //MySQLStore expiration to clean up expired sessions from the database, expiration time (5 minutes)
+    checkExpirationInterval: 1000 * 60 * 2, // Cleans expired sessions every 2 minutes
+}, connection);
 
+// Session Middleware Configuration
 app.use(session({
     key: 'session_cookie_name',
     secret: process.env.SESSION_SECRET,
@@ -29,10 +36,11 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge: 1000 * 60 * 60,
+        maxAge: 1000 * 60 * 5, // Session cookie expiration for client-side logout, expiration time (5 minutes)
         secure: false
     }
 }));
+
 
 app.post('/register', async (req, res) => {
     const { firstName, lastName, email, phone, username, password } = req.body;
@@ -58,11 +66,7 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    const { identifier, password } = req.body;
-
-    if (req.session.userId) {
-        return res.status(400).json({ message: 'You are already logged in. Please log out before logging in again.' });
-    }
+    const { identifier, password } = req.body;      
 
     try {
         const sqlQuery = 'SELECT * FROM users WHERE username = ? OR email = ?';
@@ -76,6 +80,7 @@ app.post('/login', async (req, res) => {
             }
 
             const user = results[0];
+
             const match = await bcrypt.compare(password, user.password_hash);
             if (!match) {
                 return res.status(401).json({ message: 'Invalid credentials' });
@@ -160,3 +165,4 @@ app.get('/session', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+

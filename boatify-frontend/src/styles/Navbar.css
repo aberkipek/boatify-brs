@@ -1,92 +1,95 @@
+/* Navbar CSS */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #00c3ff;
-    color: #ffffff;
-    position: relative;
-    height: 60px;
+    background-color: #FF7F50; /* Vivid Coral color for navbar */
+    color: #333333;
+    position: relative; /* Ensure the navbar container is positioned relative */
 }
 
-.navbar img {
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-    user-select: none;
-    transition: transform 0.3s ease;
-}
-
-.navbar img:hover {
-    transform: scale(1.1);
-}
-
-.profile-image-container {
-    position: relative;
+.navbar-logo img {
+    height: 40px;
     cursor: pointer;
 }
 
-.profile-image-container img {
-    transition: transform 0.3s ease;
+.navbar-welcome-text h2 {
+    margin: 0;
+    font-size: 25px;
+    font-weight: normal;
+    transition: font-size 0.3s ease; /* Smooth transition for font resizing */
 }
 
-.profile-image-container img:hover {
-    transform: scale(1.1);
-}
-
-.profile-container {
-    position: absolute;
-    top: 60px;
-    right: 0;
-    background-color: #cafbff;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    width: 300px;
-    max-width: 90vw;
-    color: #000000;
-    z-index: 10;
-    text-align: center;
-}
-
-.profile-container h1,
-.profile-container h2,
-.profile-container h3 {
-    margin: 0 0 10px;
-}
-
-.profile-container button {
-    background-color: #ff0000;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 10px;
-}
-
-.profile-container button:hover {
-    background-color: #d44242;
-}
-
+/* Make the welcome text responsive */
 @media (max-width: 768px) {
-    .navbar {
-        height: auto;
-        padding: 10px;
+    .navbar-welcome-text h2 {
+        font-size: 16px; /* Smaller font size on medium devices */
     }
+}
 
-    .navbar img {
-        width: 30px;
-        height: 30px;
+@media (max-width: 480px) {
+    .navbar-welcome-text h2 {
+        font-size: 16px; /* Smaller font size on mobile devices */
     }
+}
 
-    .profile-container {
-        right: 0;
-        left: 0;
-        top: 60px;
-        width: 90%;
-        margin: 0 auto;
-        text-align: center;
-    }
+.navbar-profile-container {
+    position: relative;
+    cursor: pointer;
+}
+
+.navbar-profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+/* Profile dropdown */
+.profile-dropdown {
+    position: absolute;
+    top: 50px; /* Adjust the dropdown's position from the top */
+    right: 0;
+    background-color: #333333; /* Dark background for dropdown */
+    color: #fff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 15px;
+    min-width: 200px;
+    z-index: 10;
+    display: none; /* Initially hide the dropdown */
+}
+
+/* Show the dropdown when profile is clicked */
+.navbar-profile-container.show-profile .profile-dropdown {
+    display: block;
+}
+
+.profile-dropdown h2, h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.profile-dropdown h1 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+/* Profile Log Out Button Styling */
+.profile-logout-btn {
+    background-color: #FF7F50; /* Tomato red for the logout button */
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Button Hover Effect */
+.profile-logout-btn:hover {
+    background-color: #ec614c; /* Darker red on hover */
 }
