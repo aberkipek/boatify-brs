@@ -166,3 +166,21 @@ app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
+app.post('/addboat', (req, res) => {
+    const { boat_name, boat_price, boat_size, boat_image_path, boat_type, boat_description } = req.body;
+
+    const sqlQuery = `
+        INSERT INTO boats (boat_name, boat_price, boat_size, boat_image_path, boat_type, boat_description)
+        VALUES (?, ?, ?, ?, ?, ?)
+    `;
+
+    connection.query(sqlQuery, [boat_name, boat_price, boat_size, boat_image_path, boat_type, boat_description], (err, results) => {
+        if (err) {
+            console.error('Error adding boat:', err);
+            return res.status(500).json({ message: 'Error adding boat to the database' });
+        }
+        res.status(201).json({ message: 'Boat added successfully!', boatId: results.insertId });
+    });
+});
+
+
