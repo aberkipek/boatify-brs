@@ -1,12 +1,11 @@
-/* Navbar CSS */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #FF7F50; /* Vivid Coral color for navbar */
+    background-color: #FF7F50;
     color: #333333;
-    position: relative; /* Ensure the navbar container is positioned relative */
+    position: relative;
 }
 
 .navbar-logo img {
@@ -18,19 +17,18 @@
     margin: 0;
     font-size: 25px;
     font-weight: normal;
-    transition: font-size 0.3s ease; /* Smooth transition for font resizing */
+    transition: font-size 0.3s ease;
 }
 
-/* Make the welcome text responsive */
 @media (max-width: 768px) {
     .navbar-welcome-text h2 {
-        font-size: 16px; /* Smaller font size on medium devices */
+        font-size: 16px;
     }
 }
 
 @media (max-width: 480px) {
     .navbar-welcome-text h2 {
-        font-size: 16px; /* Smaller font size on mobile devices */
+        font-size: 16px;
     }
 }
 
@@ -45,27 +43,26 @@
     border-radius: 50%;
 }
 
-/* Profile dropdown */
 .profile-dropdown {
     position: absolute;
-    top: 50px; /* Adjust the dropdown's position from the top */
+    top: 50px;
     right: 0;
-    background-color: #333333; /* Dark background for dropdown */
+    background-color: #333333;
     color: #fff;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     padding: 15px;
     min-width: 200px;
     z-index: 10;
-    display: none; /* Initially hide the dropdown */
+    display: none;
 }
 
-/* Show the dropdown when profile is clicked */
 .navbar-profile-container.show-profile .profile-dropdown {
     display: block;
 }
 
-.profile-dropdown h2, h3 {
+.profile-dropdown h2,
+h3 {
     margin-top: 0;
     margin-bottom: 10px;
     font-size: 14px;
@@ -77,9 +74,8 @@
     font-size: 16px;
 }
 
-/* Profile Log Out Button Styling */
 .profile-logout-btn {
-    background-color: #FF7F50; /* Tomato red for the logout button */
+    background-color: #FF7F50;
     color: white;
     font-size: 16px;
     padding: 12px 24px;
@@ -87,9 +83,4 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
-
-/* Button Hover Effect */
-.profile-logout-btn:hover {
-    background-color: #ec614c; /* Darker red on hover */
 }

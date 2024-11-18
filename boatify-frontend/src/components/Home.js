@@ -4,6 +4,8 @@ import Footer from './Footer';
 import useSession from '../hooks/useSession';
 import useSessionRedirect from '../hooks/useSessionRedirect';
 import '../styles/Home.css';
+import AdminUI from './AdminUI';
+import UserUI from './UserUI';
 
 const Home = () => {
     useSessionRedirect(false);
@@ -13,9 +15,9 @@ const Home = () => {
         <div className="home-container">
             <Navbar />
             {userData && userData.role === 'Admin' ? (
-                <div>This is Admin page!</div>
+                <AdminUI />
             ) : (
-                <div>This is homepage!</div>
+                <UserUI />
             )}
             <Footer />
         </div>
