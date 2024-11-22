@@ -17,7 +17,7 @@ const Home = () => {
             {userData && userData.role === 'Admin' ? (
                 <AdminUI />
             ) : (
-                <UserUI />
+                <UserUI userData={userData} />
             )}
             <Footer />
         </div>

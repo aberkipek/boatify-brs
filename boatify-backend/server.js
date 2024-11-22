@@ -66,7 +66,7 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    const { identifier, password } = req.body;      
+    const { identifier, password } = req.body;
 
     try {
         const sqlQuery = 'SELECT * FROM users WHERE username = ? OR email = ?';
@@ -110,10 +110,10 @@ app.post('/login', async (req, res) => {
         console.error('Error during login:', error);
         res.status(500).json({ message: 'Error processing login' });
     }
-}); 
+});
 
 app.get('/getUsername', (req, res) => {
-    const { username } = req.query; 
+    const { username } = req.query;
 
     if (!username) {
         return res.status(400).json({ message: 'Username is required' });
@@ -162,10 +162,6 @@ app.get('/session', (req, res) => {
     res.status(401).json({ message: 'No active session' });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
-
 app.post('/addboat', (req, res) => {
     const { boat_name, boat_price, boat_size, boat_image_path, boat_type, boat_description } = req.body;
 
@@ -183,4 +179,91 @@ app.post('/addboat', (req, res) => {
     });
 });
 
+app.get('/boats', (req, res) => {
+    const sqlQuery = `
+        SELECT *
+        FROM boats b
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM rentals r
+            WHERE r.boat_id = b.boat_id
+        );
+    `;
 
+    connection.query(sqlQuery, (err, results) => {
+        if (err) {
+            console.error('Error fetching available boats:', err);
+            return res.status(500).json({ message: 'Error fetching available boats' });
+        }
+        res.status(200).json(results);
+    });
+});
+
+app.post('/rentals', (req, res) => {
+    const userId = req.session.userId;
+    const { boat_id, user_id, rental_start_date, rental_end_date, total_price } = req.body;
+
+    const sqlQuery = `
+        INSERT INTO rentals (boat_id, user_id, rental_start_date, rental_end_date, total_price)
+        VALUES (?, ?, ?, ?, ?)
+    `;
+
+    connection.query(sqlQuery, [boat_id, user_id, rental_start_date, rental_end_date, total_price], (err, results) => {
+        if (err) {
+            console.error('Error inserting rental:', err);
+            return res.status(500).json({ message: 'Error saving rental to the database' });
+        }
+
+        res.status(201).json({
+            rental_id: results.insertId,
+            message: 'Rental created successfully.',
+        });
+    });
+});
+
+app.get('/rentals-with-boats', (req, res) => {
+    const userId = req.session.userId;
+
+    const sqlQuery = `
+        SELECT rentals.rental_id, rentals.boat_id, rentals.user_id, rentals.rental_start_date,
+               rentals.rental_end_date, rentals.total_price, 
+               boats.boat_name, boats.boat_image_path, boats.boat_price, boats.boat_size, boats.boat_type, boats.boat_description
+        FROM rentals
+        JOIN boats ON rentals.boat_id = boats.boat_id
+        WHERE rentals.user_id = ?;
+    `;
+
+    connection.query(sqlQuery, [userId], (error, results) => {
+        if (error) {
+            console.error('Error fetching rentals with boats:', error);
+            return res.status(500).json({ message: 'Error fetching rentals with boats' });
+        }
+        res.json(results);
+    });
+});
+
+app.post('/reviews', (req, res) => {
+    const userId = req.session.userId;
+    const { boat_id, review_date, rating, review_text } = req.body;
+
+    const sqlQuery = `
+        INSERT INTO reviews (boat_id, user_id, review_date, rating, review_text)
+        VALUES (?, ?, ?, ?, ?);
+    `;
+
+    connection.query(
+        sqlQuery,
+        [boat_id, userId, review_date, rating, review_text],
+        (error, results) => {
+            if (error) {
+                console.error('Error submitting review:', error);
+                return res.status(500).json({ message: 'Error submitting review' });
+            }
+            res.json({ message: 'Review submitted successfully', reviewId: results.insertId });
+        }
+    );
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
