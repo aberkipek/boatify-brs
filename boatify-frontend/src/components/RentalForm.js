@@ -7,6 +7,11 @@ const RentalForm = ({ selectedBoat, handleSubmitRental, closePopup }) => {
     const [totalPrice, setTotalPrice] = useState(0);
     const [showForm, setShowForm] = useState(false);
 
+    const today = new Date().toISOString().split('T')[0]; // yyyy-mm-dd format
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowDate = tomorrow.toISOString().split('T')[0]; // yyyy-mm-dd format
+
     useEffect(() => {
         if (rentalStartDate && rentalEndDate) {
             const startDate = new Date(rentalStartDate);
@@ -63,6 +68,7 @@ const RentalForm = ({ selectedBoat, handleSubmitRental, closePopup }) => {
                                 value={rentalStartDate}
                                 onChange={(e) => setRentalStartDate(e.target.value)}
                                 required
+                                min={today}
                             />
                         </div>
                         <div className="form-group">
@@ -72,6 +78,7 @@ const RentalForm = ({ selectedBoat, handleSubmitRental, closePopup }) => {
                                 value={rentalEndDate}
                                 onChange={(e) => setRentalEndDate(e.target.value)}
                                 required
+                                min={tomorrowDate}
                             />
                         </div>
                         <div className="form-group">
