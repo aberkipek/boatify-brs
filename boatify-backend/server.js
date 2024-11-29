@@ -221,6 +221,27 @@ app.post('/rentals', (req, res) => {
     });
 });
 
+app.delete('/rentals/:rental_id', (req, res) => {
+    const rentalId = req.params.rental_id;
+
+    const deleteRentalQuery = `
+        DELETE FROM rentals WHERE rental_id = ?;
+    `;
+
+    connection.query(deleteRentalQuery, [rentalId], (err, results) => {
+        if (err) {
+            console.error('Error deleting rental:', err);
+            return res.status(500).json({ message: 'Error deleting rental' });
+        }
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ message: 'Rental not found' });
+        }
+
+        res.status(200).json({ message: 'Rental deleted successfully' });
+    });
+});
+
 app.get('/rentals-with-boats', (req, res) => {
     const userId = req.session.userId;
 
@@ -260,6 +281,76 @@ app.post('/reviews', (req, res) => {
                 return res.status(500).json({ message: 'Error submitting review' });
             }
             res.json({ message: 'Review submitted successfully', reviewId: results.insertId });
+        }
+    );
+});
+
+app.get('/reviews', (req, res) => {
+    const userId = req.session.userId;
+
+    const sqlQuery = `
+        SELECT r.review_id, r.boat_id, r.review_date, r.rating, r.review_text, b.boat_name
+        FROM reviews r
+        JOIN boats b ON r.boat_id = b.boat_id
+        WHERE r.user_id = ?
+        ORDER BY r.review_date DESC;
+    `;
+
+    connection.query(sqlQuery, [userId], (error, results) => {
+        if (error) {
+            console.error('Error fetching reviews:', error);
+            return res.status(500).json({ message: 'Error fetching reviews' });
+        }
+        res.json(results);
+    });
+});
+
+app.put('/reviews/:id', (req, res) => {
+    const { id } = req.params;
+    const { rating, review_text } = req.body;
+
+    const sqlQuery = `
+        UPDATE reviews
+        SET rating = ?, review_text = ?
+        WHERE review_id = ?
+    `;
+
+    connection.query(
+        sqlQuery,
+        [rating, review_text, id, req.session.userId],
+        (error, results) => {
+            if (error) {
+                console.error('Error updating review:', error);
+                return res.status(500).json({ message: 'Error updating review' });
+            }
+            if (results.affectedRows === 0) {
+                return res.status(404).json({ message: 'Review not found or permission denied' });
+            }
+            res.json({ message: 'Review updated successfully' });
+        }
+    );
+});
+
+app.delete('/reviews/:id', (req, res) => {
+    const { id } = req.params;
+
+    const sqlQuery = `
+        DELETE FROM reviews
+        WHERE review_id = ? AND user_id = ?;
+    `;
+
+    connection.query(
+        sqlQuery,
+        [id, req.session.userId],
+        (error, results) => {
+            if (error) {
+                console.error('Error deleting review:', error);
+                return res.status(500).json({ message: 'Error deleting review' });
+            }
+            if (results.affectedRows === 0) {
+                return res.status(404).json({ message: 'Review not found or permission denied' });
+            }
+            res.json({ message: 'Review deleted successfully' });
         }
     );
 });

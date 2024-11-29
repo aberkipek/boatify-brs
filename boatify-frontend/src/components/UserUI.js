@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import Boats from './Boats';
 import RentedBoats from './RentedBoats';
-import RentalForm from './RentalForm';
+import Reviews from './Reviews';
 import ReviewForm from './ReviewForm';
+import RentalForm from './RentalForm';
 import '../styles/UserUI.css';
 
 const UserUI = ({ userData }) => {
@@ -15,6 +16,8 @@ const UserUI = ({ userData }) => {
         rating: 1,
         reviewText: '',
     });
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [editingReviewId, setEditingReviewId] = useState(null);
 
     const handleAvailableBoatClick = (boat) => {
         setSelectedBoat(boat);
@@ -24,12 +27,7 @@ const UserUI = ({ userData }) => {
     const handleRentedBoatClick = (boat) => {
         setSelectedBoat(boat);
         setFormState({ showRentalForm: false, showReviewForm: true });
-    };
-
-    const closePopup = () => {
-        setSelectedBoat(null);
-        setFormState({ showRentalForm: false, showReviewForm: false });
-        setReviewData({ rating: 1, reviewText: '' });
+        setIsEditMode(false);
     };
 
     const handleSubmitRental = async (rentalData) => {
@@ -74,24 +72,64 @@ const UserUI = ({ userData }) => {
         };
 
         try {
-            const response = await fetch('http://localhost:3001/reviews', {
-                method: 'POST',
+            const url = isEditMode
+                ? `http://localhost:3001/reviews/${editingReviewId}`
+                : 'http://localhost:3001/reviews';
+            const method = isEditMode ? 'PUT' : 'POST';
+
+            const response = await fetch(url, {
+                method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(reviewPayload),
                 credentials: 'include',
             });
 
             if (response.ok) {
-                alert('Review submitted successfully!');
+                alert(`Review ${isEditMode ? 'updated' : 'submitted'} successfully!`);
                 closePopup();
             } else {
                 const errorData = await response.json();
-                alert(`Error: ${errorData.message || 'Unable to submit review.'}`);
+                alert(`Error: ${errorData.message || 'Unable to process review.'}`);
             }
         } catch (error) {
             console.error('Error submitting review:', error);
             alert('An error occurred while submitting the review.');
         }
+    };
+
+    const handleCancelRental = async () => {
+        if (!selectedBoat) return;
+
+        const confirmCancel = window.confirm('Are you sure you want to cancel this rental?');
+        if (confirmCancel) {
+            try {
+                const rentalId = selectedBoat.rental_id;
+
+                const response = await fetch(`http://localhost:3001/rentals/${rentalId}`, {
+                    method: 'DELETE',
+                    credentials: 'include',
+                });
+
+                if (response.ok) {
+                    alert('Rental canceled successfully!');
+                    closePopup();
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.message || 'Unable to cancel rental.'}`);
+                }
+            } catch (error) {
+                console.error('Error canceling rental:', error);
+                alert('An error occurred while canceling the rental.');
+            }
+        }
+    };
+
+    const closePopup = () => {
+        setSelectedBoat(null);
+        setFormState({ showRentalForm: false, showReviewForm: false });
+        setReviewData({ rating: 1, reviewText: '' });
+        setIsEditMode(false);
+        setEditingReviewId(null);
     };
 
     return (
@@ -116,14 +154,17 @@ const UserUI = ({ userData }) => {
                         selectedBoat={selectedBoat}
                         rating={reviewData.rating}
                         reviewText={reviewData.reviewText}
-                        setRating={(rating) =>
-                            setReviewData((prev) => ({ ...prev, rating }))}
-                        setReviewText={(text) =>
-                            setReviewData((prev) => ({ ...prev, reviewText: text }))}
+                        setRating={(rating) => setReviewData((prev) => ({ ...prev, rating }))}
+                        setReviewText={(text) => setReviewData((prev) => ({ ...prev, reviewText: text }))}
                         closePopup={closePopup}
-                        handleSubmitReview={handleSubmitReview}
+                        handleSubmit={handleSubmitReview}
+                        isEditMode={isEditMode}
+                        handleCancelRental={handleCancelRental}
                     />
                 )}
+                <div className="reviews-section">
+                    <Reviews />
+                </div>
             </div>
         </div>
     );
