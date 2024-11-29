@@ -18,7 +18,7 @@ const Navbar = () => {
             </div>
             {userData && (
                 <div className="navbar-welcome-text">
-                    <h2>Welcome, {userData.fullName}!</h2>
+                    <p>Welcome, <strong>{userData.fullName}</strong>!</p>
                 </div>
             )}
             <div

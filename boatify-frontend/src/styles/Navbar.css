@@ -13,7 +13,7 @@
     cursor: pointer;
 }
 
-.navbar-welcome-text h2 {
+.navbar-welcome-text p {
     margin: 0;
     font-size: 25px;
     font-weight: normal;

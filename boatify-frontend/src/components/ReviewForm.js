@@ -7,12 +7,14 @@ const ReviewForm = ({
     setRating,
     setReviewText,
     closePopup,
-    handleSubmitReview,
+    handleSubmit,
+    isEditMode,
+    handleCancelRental,
 }) => (
     <div className="boat-popup-overlay">
         <div className="boat-popup">
             <button className="close-popup" onClick={closePopup}>X</button>
-            <h3>Review {selectedBoat.boat_name}</h3>
+            <h3>{isEditMode ? `Edit Review for ${selectedBoat?.boat_name}` : `Review ${selectedBoat.boat_name}`}</h3>
             <form onSubmit={(e) => e.preventDefault()}>
                 <div className="form-group">
                     <label>Rating (1-5):</label>
@@ -21,11 +23,9 @@ const ReviewForm = ({
                         onChange={(e) => setRating(Number(e.target.value))}
                         required
                     >
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
+                        {[1, 2, 3, 4, 5].map((num) => (
+                            <option key={num} value={num}>{num}</option>
+                        ))}
                     </select>
                 </div>
                 <div className="form-group">
@@ -37,9 +37,23 @@ const ReviewForm = ({
                     ></textarea>
                 </div>
                 <div className="form-group">
-                    <button onClick={handleSubmitReview}>Submit Review</button>
+                    <button onClick={handleSubmit}>
+                        {isEditMode ? 'Update Review' : 'Submit Review'}
+                    </button>
                 </div>
             </form>
+
+            {!isEditMode && (
+                <div className="form-group">
+                    <button
+                        type="button"
+                        className="cancel-rental-button"
+                        onClick={handleCancelRental}
+                    >
+                        Cancel Rental
+                    </button>
+                </div>
+            )}
         </div>
     </div>
 );
