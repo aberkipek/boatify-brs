@@ -8,7 +8,6 @@ const useSessionCountdown = ({ onLogout }) => {
         const fetchSessionExpiration = async () => {
             const response = await fetch('http://localhost:3001/session', { credentials: 'include' });
             if (response.ok) {
-                const sessionData = await response.json();
                 const maxAge = 5 * 60 * 1000;
                 const expirationTime = Date.now() + maxAge;
                 const remainingTime = expirationTime - Date.now();
