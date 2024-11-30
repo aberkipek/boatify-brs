@@ -11,6 +11,7 @@ const app = express();
 const PORT = process.env.PORT;
 
 const defaultRoleId = 1;
+const adminRoleId = 2;
 
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -41,7 +42,6 @@ app.use(session({
     }
 }));
 
-
 app.post('/register', async (req, res) => {
     const { firstName, lastName, email, phone, username, password } = req.body;
 
@@ -53,6 +53,29 @@ app.post('/register', async (req, res) => {
             VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
         `;
         connection.query(sqlQuery, [firstName, lastName, email, phone, username, hashedPassword, defaultRoleId], (err) => {
+            if (err) {
+                console.error('Error registering user:', err);
+                return res.status(500).json({ message: 'Error registering user' });
+            }
+            res.status(201).json({ message: 'User registered successfully!' });
+        });
+    } catch (error) {
+        console.error('Error hashing password:', error);
+        res.status(500).json({ message: 'Error processing registration' });
+    }
+});
+
+app.post('/registerAdmin', async (req, res) => {
+    const { firstName, lastName, email, phone, username, password } = req.body;
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const sqlQuery = `
+            INSERT INTO users 
+            (first_name, last_name, email, phone_number, username, password_hash, role_id, created_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
+        `;
+        connection.query(sqlQuery, [firstName, lastName, email, phone, username, hashedPassword, adminRoleId], (err) => {
             if (err) {
                 console.error('Error registering user:', err);
                 return res.status(500).json({ message: 'Error registering user' });
