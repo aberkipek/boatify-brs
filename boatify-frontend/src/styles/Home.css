@@ -22,3 +22,31 @@
     margin: 0;
     padding: 5px 0;
 }
+
+.session-popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #FF7F50;
+    padding: 15px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.session-popup p {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.session-popup button {
+    margin-right: 10px;
+    background-color: #52a5f8;
+}
+
+.session-popup button:hover {
+    margin-right: 10px;
+    background-color: #007BFF;
+}
