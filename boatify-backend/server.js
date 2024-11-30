@@ -36,11 +36,21 @@ app.use(session({
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
+    rolling: true,
     cookie: {
         maxAge: 1000 * 60 * 5, // Session cookie expiration for client-side logout, expiration time (5 minutes)
         secure: false
     }
 }));
+
+app.post('/extend-session', (req, res) => {
+    if (req.session.userId) {
+        req.session.touch();
+        res.status(200).json({ message: 'Session extended' });
+    } else {
+        res.status(401).json({ message: 'No active session' });
+    }
+});
 
 app.post('/register', async (req, res) => {
     const { firstName, lastName, email, phone, username, password } = req.body;
