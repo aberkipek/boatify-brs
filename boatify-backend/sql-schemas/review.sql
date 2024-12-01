@@ -1,4 +1,4 @@
-use boatify_db;
+USE boatify_db;
 
 CREATE TABLE reviews (
     review_id INT AUTO_INCREMENT PRIMARY KEY,

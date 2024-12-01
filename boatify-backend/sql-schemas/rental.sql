@@ -1,4 +1,4 @@
-use boatify_db;
+USE boatify_db;
 
 CREATE TABLE rentals (
     rental_id INT AUTO_INCREMENT PRIMARY KEY,
