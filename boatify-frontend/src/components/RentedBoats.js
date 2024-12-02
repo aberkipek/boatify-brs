@@ -5,18 +5,27 @@ const RentedBoats = ({ onBoatClick }) => {
     const [rentedBoats, setRentedBoats] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:3001/rentals-with-boats', {
-            method: 'GET',
-            credentials: 'include',
-        })
-            .then(response => response.json())
-            .then(data => {
-                setRentedBoats(data);
+        const fetchRentedBoats = () => {
+            fetch('http://localhost:3001/rentals-with-boats', {
+                method: 'GET',
+                credentials: 'include',
             })
-            .catch(error => {
-                console.error('Error fetching rented boats:', error);
-            });
-    }, [rentedBoats]);
+                .then(response => response.json())
+                .then(data => {
+                    setRentedBoats(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching rented boats:', error);
+                });
+        };
+
+        fetchRentedBoats();
+
+        const interval = setInterval(fetchRentedBoats, 2000);
+
+        return () => clearInterval(interval);
+
+    }, []);
 
     return (
         <div className="rented-boats">

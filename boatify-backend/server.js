@@ -214,13 +214,17 @@ app.post('/addboat', (req, res) => {
 
 app.get('/boats', (req, res) => {
     const sqlQuery = `
-        SELECT *
+        SELECT 
+            b.*, 
+            ROUND(AVG(r.rating), 1) AS average_rating
         FROM boats b
+        LEFT JOIN reviews r ON b.boat_id = r.boat_id
         WHERE NOT EXISTS (
             SELECT 1
-            FROM rentals r
-            WHERE r.boat_id = b.boat_id
-        );
+            FROM rentals r2
+            WHERE r2.boat_id = b.boat_id
+        )
+        GROUP BY b.boat_id;
     `;
 
     connection.query(sqlQuery, (err, results) => {
