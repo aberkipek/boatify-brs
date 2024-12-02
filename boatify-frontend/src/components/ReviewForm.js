@@ -14,6 +14,23 @@ const ReviewForm = ({
     <div className="boat-popup-overlay">
         <div className="boat-popup">
             <button className="close-popup" onClick={closePopup}>X</button>
+            <h3>{!isEditMode && `${selectedBoat.boat_name} Rental Details`}</h3>
+
+            {!isEditMode && (
+                <div className="boat-details">
+                    <p><strong>Boat Name:</strong> {selectedBoat.boat_name}</p>
+                    <p><strong>Total Price:</strong> ${selectedBoat.total_price}</p>
+                    <p><strong>Rental Dates:</strong> {new Date(selectedBoat.rental_start_date).toLocaleDateString()} - {new Date(selectedBoat.rental_end_date).toLocaleDateString()}</p>
+                    <button
+                        type="button"
+                        className="cancel-rental-button"
+                        onClick={handleCancelRental}
+                    >
+                        Cancel Rental
+                    </button>
+                </div>
+            )}
+            
             <h3>{isEditMode ? `Edit Review for ${selectedBoat?.boat_name}` : `Review ${selectedBoat.boat_name}`}</h3>
             <form onSubmit={(e) => e.preventDefault()}>
                 <div className="form-group">
@@ -41,19 +58,7 @@ const ReviewForm = ({
                         {isEditMode ? 'Update Review' : 'Submit Review'}
                     </button>
                 </div>
-            </form>
-
-            {!isEditMode && (
-                <div className="form-group">
-                    <button
-                        type="button"
-                        className="cancel-rental-button"
-                        onClick={handleCancelRental}
-                    >
-                        Cancel Rental
-                    </button>
-                </div>
-            )}
+            </form>            
         </div>
     </div>
 );

@@ -7,15 +7,27 @@ const Reviews = () => {
     const [editingReview, setEditingReview] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:3001/reviews', {
-            method: 'GET',
-            credentials: 'include',
-        })
-            .then((response) => response.json())
-            .then((data) => setReviews(data))
-            .catch((error) => console.error('Error fetching reviews:', error));
-    }, [reviews]);
-
+        const fetchReviews = () => {
+            fetch('http://localhost:3001/reviews', {
+                method: 'GET',
+                credentials: 'include',
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    setReviews(data);
+                })
+                .catch((error) => {
+                    console.error('Error fetching reviews:', error);
+                });
+        };
+    
+        fetchReviews();
+    
+        const interval = setInterval(fetchReviews, 2000);
+    
+        return () => clearInterval(interval);
+    }, []);  
+    
     const handleDeleteClick = (reviewId) => {
         fetch(`http://localhost:3001/reviews/${reviewId}`, {
             method: 'DELETE',

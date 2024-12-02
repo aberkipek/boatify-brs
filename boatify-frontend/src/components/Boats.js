@@ -5,18 +5,27 @@ const Boats = ({ onBoatClick }) => {
     const [boats, setBoats] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:3001/boats', {
-            method: 'GET',
-            credentials: 'include',
-        })
-            .then(response => response.json())
-            .then(data => {
-                setBoats(data);
+        const fetchBoats = () => {
+            fetch('http://localhost:3001/boats', {
+                method: 'GET',
+                credentials: 'include',
             })
-            .catch(error => {
-                console.error('Error fetching boats:', error);
-            });
-    }, [boats]);
+                .then(response => response.json())
+                .then(data => {
+                    setBoats(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching boats:', error);
+                });
+        };
+
+        fetchBoats();
+
+        const interval = setInterval(fetchBoats, 2000);
+
+        return () => clearInterval(interval);
+
+    }, []);
 
     return (
         <div className="boats">
