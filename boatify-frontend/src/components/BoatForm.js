@@ -1,12 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const BoatRegisterForm = ({ onClose }) => {
+const BoatForm = ({ onClose, boatToEdit = null }) => {
   const [boat_name, setName] = useState('');
   const [boat_price, setPrice] = useState('');
   const [boat_size, setSize] = useState('');
   const [boat_image_path, setImagePath] = useState('');
   const [boat_type, setType] = useState('');
   const [boat_description, setDescription] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (boatToEdit) {
+      setName(boatToEdit.boat_name);
+      setPrice(boatToEdit.boat_price);
+      setSize(boatToEdit.boat_size);
+      setImagePath(boatToEdit.boat_image_path);
+      setType(boatToEdit.boat_type);
+      setDescription(boatToEdit.boat_description);
+      setIsEditing(true);
+    }
+  }, [boatToEdit]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,8 +34,13 @@ const BoatRegisterForm = ({ onClose }) => {
     };
 
     try {
-      const response = await fetch('http://localhost:3001/addboat', {
-        method: 'POST',
+      const method = isEditing ? 'PUT' : 'POST';
+      const url = isEditing
+        ? `http://localhost:3001/boat/${boatToEdit.boat_id}`
+        : 'http://localhost:3001/addboat';
+
+      const response = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -30,28 +48,20 @@ const BoatRegisterForm = ({ onClose }) => {
       });
 
       if (!response.ok) {
-        throw new Error('Error adding boat');
+        throw new Error('Error saving boat');
       }
 
-      alert('Boat added successfully!');
-
+      alert(isEditing ? 'Boat updated successfully!' : 'Boat added successfully!');
       onClose();
-      setName('');
-      setPrice('');
-      setSize('');
-      setImagePath('');
-      setType('');
-      setDescription('');
-
     } catch (error) {
-      console.error('Error adding boat:', error);
-      alert('There was an error adding the boat. Please try again.');
+      console.error('Error saving boat:', error);
+      alert('There was an error saving the boat. Please try again.');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="boat-register-form">
-      <h2>Add New Boat</h2>
+    <form onSubmit={handleSubmit} className="boat-form">
+      <h2>{isEditing ? 'Edit Boat' : 'Add New Boat'}</h2>
 
       <label>
         Boat Name:
@@ -115,34 +125,11 @@ const BoatRegisterForm = ({ onClose }) => {
       </label>
 
       <div className="button-container">
-        <button type="submit">Add Boat</button>
+        <button type="submit">{isEditing ? 'Update Boat' : 'Add Boat'}</button>
         <button type="button" onClick={onClose}>Cancel</button>
       </div>
     </form>
   );
 };
 
-const AddBoatButton = () => {
-  const [isFormVisible, setIsFormVisible] = useState(false);
-  
-  const openBoatRegisterForm = () => {
-    setIsFormVisible(true);
-  };
-
-  const closeBoatRegisterForm = () => {
-    setIsFormVisible(false);
-  };
-
-  return (
-    <div className="add-boat-button-container">
-      <button className="add-button" onClick={openBoatRegisterForm}>Add New Boat</button>
-      {isFormVisible && (
-        <div className="form-overlay">
-          <BoatRegisterForm onClose={closeBoatRegisterForm} />
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default AddBoatButton;
+export default BoatForm;

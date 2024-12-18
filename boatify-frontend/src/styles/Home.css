@@ -1,52 +1,59 @@
 .home-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: #52a5f8;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #52a5f8;
+  background-image: url("../assets/images/bg-2.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-sizing: border-box;
 }
 
 .footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #333333;
-    color: #FF7F50;
-    padding: 5px 0;
-    text-align: center;
-    font-size: 0.7rem;
-    z-index: 1000;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #333333;
+  color: #52a5f8;
+  padding: 5px 0;
+  text-align: center;
+  font-size: 0.7rem;
+  z-index: 1000;
 }
 
 .footer p {
-    margin: 0;
-    padding: 5px 0;
+  margin: 0;
+  padding: 5px 0;
 }
 
 .session-popup {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #FF7F50;
-    padding: 15px;
-    border: 1px solid gray;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #52a5f8;
+  padding: 15px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
 }
 
 .session-popup p {
-    margin: 0;
-    margin-bottom: 10px;
-    font-size: 16px;
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: white;
 }
 
 .session-popup button {
-    margin-right: 10px;
-    background-color: #52a5f8;
+  margin-right: 10px;
+  background-color: white;
+  color: #52a5f8;
 }
 
 .session-popup button:hover {
-    margin-right: 10px;
-    background-color: #007BFF;
+  margin-right: 10px;
+  background-color: #f8f8f8c5;
 }
