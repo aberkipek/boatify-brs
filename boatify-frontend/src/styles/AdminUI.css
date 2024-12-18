@@ -1,100 +1,203 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  margin: 0;
-  padding: 0;
-}
-
-.add-boat-button-container {
+.admin-ui {
   display: flex;
-  justify-content: center;
-  margin-top: 20px;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 }
 
-.add-button {
+.add-boat-btn {
+  margin-bottom: 20px;
   padding: 10px 20px;
+  font-size: 16px;
   background-color: white;
-  color: black;
+  color: #52a5f8;
   border: none;
   cursor: pointer;
   border-radius: 5px;
-  font-size: 16px;
 }
 
-.add-button:hover {
-  background-color: black;
+.add-boat-btn:hover {
+  background-color: #f8f8f8c5;
+}
+
+.boat-list-container {
+  width: 60%;
+  overflow-y: auto;
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f8f8f8;
+  box-sizing: border-box;
+}
+
+.boat-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.boat-card {
+  width: 200px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  background-color: #fff;
+}
+
+.boat-card:hover {
+  transform: translateY(-5px);
+}
+
+.boat-image-container {
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+}
+
+.boat-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.boat-info {
+  padding: 10px;
+}
+
+.boat-info h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.boat-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.boat-actions button {
+  padding: 5px 10px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button {
+  background-color: #52a5f8;
   color: white;
-  transition: background-color 0.3s, color 0.3s;
+}
+
+.edit-button:hover {
+  background-color: #007bff;
+}
+
+.delete-button {
+  background-color: red;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: rgba(255, 0, 0, 0.733);
 }
 
 .form-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
 
-.boat-register-form {
-  background-color: white;
+.boat-form {
+  background-color: #fff;
   padding: 20px;
   border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 400px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 100%;
+  margin: 0 auto;
 }
 
-.boat-register-form h2 {
-  text-align: center;
+.boat-form h2 {
   margin-bottom: 20px;
+  text-align: center;
+  font-size: 24px;
+  color: #333;
 }
 
-.boat-register-form label {
+.boat-form label {
   display: block;
-  margin-bottom: 10px;
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #333;
 }
 
-.boat-register-form input,
-.boat-register-form select,
-.boat-register-form textarea {
+.boat-form input,
+.boat-form textarea,
+.boat-form select {
   width: 100%;
-  padding: 8px;
+  padding: 12px;
   margin-bottom: 15px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.boat-register-form textarea {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-  resize: none; 
-  overflow: hidden; 
-}
-
-.boat-register-form button {
-  padding: 10px;
-  background-color: #FF7F50;
-  color: white;
-  border: none;
-  cursor: pointer;
   border-radius: 5px;
-  width: 100%;
+  font-size: 16px;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.boat-form input[type="url"] {
+  font-size: 14px;
+}
+
+.boat-form textarea {
+  height: 120px;
+  resize: vertical;
+}
+
+.boat-form select {
   font-size: 16px;
 }
 
-.boat-register-form button[type="button"] {
-  background-color: black;
+.boat-form button {
+  background-color: #52a5f8;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.button-container {
+.boat-form button:hover {
+  background-color: #007bff;
+}
+
+.boat-form .button-container {
   display: flex;
+  justify-content: space-between;
   gap: 10px;
+}
+
+.no-boats-message {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }

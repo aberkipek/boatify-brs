@@ -1,190 +1,185 @@
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #FF7F50;
-    color: #333;
-    position: relative;
-    z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #52a5f8;
+  color: white;
+  position: relative;
+  z-index: 10;
 }
 
 .navbar-logo img {
-    height: 40px;
-    cursor: pointer;
+  height: 40px;
+  cursor: pointer;
 }
 
 .navbar-welcome-text p {
-    margin: 0;
-    font-size: 25px;
-    font-weight: normal;
-    transition: font-size 0.3s ease;
-    margin-left: 20px;
-    margin-right: 20px;
+  margin: 0;
+  font-size: 25px;
+  font-weight: normal;
+  transition: font-size 0.3s ease;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 @media (max-width: 1024px) {
-    .navbar-welcome-text p {
-        font-size: 22px;
-    }
+  .navbar-welcome-text p {
+    font-size: 22px;
+  }
 }
 
 @media (max-width: 768px) {
-    .navbar-welcome-text p {
-        font-size: 20px;
-    }
+  .navbar-welcome-text p {
+    font-size: 20px;
+  }
 }
 
 @media (max-width: 600px) {
-    .navbar-welcome-text p {
-        font-size: 18px;
-    }
+  .navbar-welcome-text p {
+    font-size: 18px;
+  }
 }
 
 @media (max-width: 480px) {
-    .navbar-welcome-text p {
-        font-size: 16px;
-    }
+  .navbar-welcome-text p {
+    font-size: 16px;
+  }
 }
 
 .navbar-profile-container {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
 }
 
 .navbar-profile-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
 }
 
 .profile-dropdown {
-    position: absolute;
-    top: 50px;
-    right: 0;
-    background-color: #333;
-    color: #52A5F8;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    width: 220px;
-    padding: 15px;
-    display: none;
-    z-index: 5;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #333;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 220px;
+  padding: 15px;
+  display: none;
+  z-index: 5;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .navbar-profile-container.show-profile .profile-dropdown {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .profile-dropdown .profile-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
 .profile-dropdown .profile-info h1 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 5px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 5px;
 }
 
 .profile-dropdown .profile-info h2 {
-    margin: 0;
-    font-size: 14px;
-    font-weight: normal;
-    margin-bottom: 10px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: normal;
+  margin-bottom: 10px;
 }
 
 .profile-dropdown .profile-info h3 {
-    margin: 0;
-    font-size: 14px;
+  margin: 0;
+  font-size: 14px;
 }
 
 .profile-logout-btn {
-    background-color: #FF7F50;
-    color: white;
-    font-size: 16px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    width: 100%;
-    cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    margin-top: 10px;
-    outline: none;
-    box-shadow: none;
+  background-color: white;
+  color: #52a5f8;
+  font-size: 16px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin-top: 10px;
+  outline: none;
+  box-shadow: none;
 }
 
 .profile-logout-btn:focus {
-    outline: none;
-    box-shadow: none;
+  outline: none;
+  box-shadow: none;
 }
 
 .profile-logout-btn:hover {
-    background-color: #e76a43;
-    box-shadow: none;
-}
-
-.profile-logout-btn:active {
-    background-color: #d7633a;
-    box-shadow: none;
+  background-color: #f8f8f8c5;
+  box-shadow: none;
 }
 
 @media (max-width: 768px) {
-    .profile-dropdown {
-        width: 180px;
-        padding: 12px;
-    }
+  .profile-dropdown {
+    width: 180px;
+    padding: 12px;
+  }
 
-    .profile-dropdown .profile-info h1 {
-        font-size: 14px;
-    }
+  .profile-dropdown .profile-info h1 {
+    font-size: 14px;
+  }
 
-    .profile-dropdown .profile-info h2 {
-        font-size: 12px;
-    }
+  .profile-dropdown .profile-info h2 {
+    font-size: 12px;
+  }
 
-    .profile-dropdown .profile-info h3 {
-        font-size: 12px;
-    }
+  .profile-dropdown .profile-info h3 {
+    font-size: 12px;
+  }
 
-    .profile-logout-btn {
-        padding: 8px 16px;
-    }
+  .profile-logout-btn {
+    padding: 8px 16px;
+  }
 }
 
 @media (max-width: 480px) {
-    .profile-dropdown {
-        width: 160px;
-        padding: 10px;
-    }
+  .profile-dropdown {
+    width: 160px;
+    padding: 10px;
+  }
 
-    .profile-dropdown .profile-info h1 {
-        font-size: 12px;
-    }
+  .profile-dropdown .profile-info h1 {
+    font-size: 12px;
+  }
 
-    .profile-dropdown .profile-info h2 {
-        font-size: 10px;
-    }
+  .profile-dropdown .profile-info h2 {
+    font-size: 10px;
+  }
 
-    .profile-dropdown .profile-info h3 {
-        font-size: 10px;
-    }
+  .profile-dropdown .profile-info h3 {
+    font-size: 10px;
+  }
 
-    .profile-logout-btn {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
+  .profile-logout-btn {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
 }

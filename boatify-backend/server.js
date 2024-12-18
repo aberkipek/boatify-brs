@@ -236,6 +236,117 @@ app.get('/boats', (req, res) => {
     });
 });
 
+app.get('/allboats', (req, res) => {
+    const sqlQuery = `
+        SELECT 
+            b.*, 
+            ROUND(AVG(r.rating), 1) AS average_rating
+        FROM boats b
+        LEFT JOIN reviews r ON b.boat_id = r.boat_id
+        GROUP BY b.boat_id;
+    `;
+
+    connection.query(sqlQuery, (err, results) => {
+        if (err) {
+            console.error('Error fetching all boats:', err);
+            return res.status(500).json({ message: 'Error fetching all boats' });
+        }
+        res.status(200).json(results);
+    });
+});
+
+app.put('/boat/:id', (req, res) => {
+    const boatId = req.params.id;
+    const { boat_name, boat_price, boat_size, boat_image_path, boat_type, boat_description } = req.body;
+
+    const sqlQuery = `
+        UPDATE boats
+        SET 
+            boat_name = ?, 
+            boat_price = ?, 
+            boat_size = ?, 
+            boat_image_path = ?, 
+            boat_type = ?, 
+            boat_description = ?
+        WHERE boat_id = ?;
+    `;
+
+    connection.query(sqlQuery, [boat_name, boat_price, boat_size, boat_image_path, boat_type, boat_description, boatId], (err, result) => {
+        if (err) {
+            console.error('Error updating boat:', err);
+            return res.status(500).json({ message: 'Error updating boat' });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Boat not found' });
+        }
+        res.status(200).json({ message: 'Boat updated successfully' });
+    });
+});
+
+app.delete('/boat/:id', (req, res) => {
+    const boatId = req.params.id;
+
+    connection.beginTransaction((err) => {
+        if (err) {
+            console.error('Error starting transaction:', err);
+            return res.status(500).json({ message: 'Error starting transaction' });
+        }
+
+        const deleteReviewsQuery = `
+            DELETE FROM reviews
+            WHERE boat_id = ?;
+        `;
+
+        connection.query(deleteReviewsQuery, [boatId], (err, result) => {
+            if (err) {
+                return connection.rollback(() => {
+                    console.error('Error deleting reviews:', err);
+                    res.status(500).json({ message: 'Error deleting reviews' });
+                });
+            }
+
+            const deleteRentalsQuery = `
+                DELETE FROM rentals
+                WHERE boat_id = ?;
+            `;
+
+            connection.query(deleteRentalsQuery, [boatId], (err, result) => {
+                if (err) {
+                    return connection.rollback(() => {
+                        console.error('Error deleting rentals:', err);
+                        res.status(500).json({ message: 'Error deleting rentals' });
+                    });
+                }
+
+                const deleteBoatQuery = `
+                    DELETE FROM boats
+                    WHERE boat_id = ?;
+                `;
+
+                connection.query(deleteBoatQuery, [boatId], (err, result) => {
+                    if (err) {
+                        return connection.rollback(() => {
+                            console.error('Error deleting boat:', err);
+                            res.status(500).json({ message: 'Error deleting boat' });
+                        });
+                    }
+
+                    connection.commit((err) => {
+                        if (err) {
+                            return connection.rollback(() => {
+                                console.error('Error committing transaction:', err);
+                                res.status(500).json({ message: 'Error committing transaction' });
+                            });
+                        }
+
+                        res.status(200).json({ message: 'Boat, rentals, and reviews deleted successfully' });
+                    });
+                });
+            });
+        });
+    });
+});
+
 app.post('/rentals', (req, res) => {
     const userId = req.session.userId;
     const { boat_id, user_id, rental_start_date, rental_end_date, total_price } = req.body;
