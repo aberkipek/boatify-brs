@@ -78,7 +78,7 @@ const AdminUI = () => {
                         {boats.map((boat) => (
                             <div key={boat.boat_id} className="boat-card">
                                 <div className="boat-image-container">
-                                    <img className="boat-image" src={boat.image_url} alt={boat.name} />
+                                    <img className="boat-image" src={boat.boat_image_path} alt={boat.name} />
                                 </div>
                                 <div className="boat-info">
                                     <h3>{boat.name}</h3>
